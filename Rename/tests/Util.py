@@ -58,6 +58,14 @@ class Test(unittest.TestCase):
         self.assertEqual(found_name, new_name, "new name is wrong")
         self.assertEqual(found_ts, ts, "time stamp is wrong")
 
+        old_name = "abc/xyz/Thumbs (2) (2014_08_25 20_02_34 UTC).pdf"
+        new_name = "abc/xyz/Thumbs (2).pdf"
+        ts = "2014_08_25 20_02_34"
+        found_name, found_ts = parse_file_name(old_name)
+        self.assertEqual(found_name, new_name, "new name is wrong")
+        self.assertEqual(found_ts, ts, "time stamp is wrong")
+
+
     def test_rename_files(self):
         result = get_files_list('datadir', True)
         rename_file_list(result)

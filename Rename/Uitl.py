@@ -13,7 +13,7 @@ def get_files_list(path, recursive = False):
     for (dirpath, dirnames, filenames) in walk(path):
         full_dirpaths = []
         full_filenames = []
-        full_dirpaths.extend(os.path.join(dirpath, dir) for dir in dirnames) 
+        full_dirpaths.extend(os.path.join(dirpath, d) for d in dirnames) 
         full_filenames.extend(os.path.join(dirpath, f) for f in filenames)         
         total_filenames.extend(full_filenames)
         if recursive == False :
@@ -57,14 +57,14 @@ def rename_file_list(filenames, update=False):
                 except OSError:
                     pass
             
-def parse_file_name(file):
-    ts_search = re.search('\((.*)UTC\)', file)
+def parse_file_name(name):
+    ts_search = re.search('\(([^)]*)UTC\)', name)
     if ts_search:
         ts = ts_search.group(1).strip()
-        new_name = re.sub(' \(' + ts + ' UTC\)', '', file)
+        new_name = re.sub(' \(' + ts + ' UTC\)', '', name)
         return (new_name, ts)
     else:
-        return (file, None)
+        return (name, None)
 
 def get_dirs_list(path):
     return True

@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+
 '''
 Created on Nov 14, 2016
 
 @author: cfsu
 '''
+
 import unittest
 import os
 from Rename.Uitl import get_files_list, get_dirs_list, parse_file_name,\
@@ -65,6 +68,13 @@ class Test(unittest.TestCase):
         self.assertEqual(found_name, new_name, "new name is wrong")
         self.assertEqual(found_ts, ts, "time stamp is wrong")
 
+
+        old_name = '各班代表名單 (2014_06_09 02_52_33 UTC).xls'
+        new_name = '各班代表名單.xls'
+        ts = "2014_06_09 02_52_33"
+        found_name, found_ts = parse_file_name(old_name)
+        self.assertEqual(found_name, new_name, "new name is wrong")
+        self.assertEqual(found_ts, ts, "time stamp is wrong")
 
     def test_rename_files(self):
         result = get_files_list('datadir', True)

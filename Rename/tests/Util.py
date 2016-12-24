@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
 
         old_name = "Thumbs (2014_08_25).pdf"
         new_name = "Thumbs (2014_08_25).pdf"
-        ts = None
+        ts = '9999'
         found_name, found_ts = parse_file_name(old_name)
         self.assertEqual(found_name, new_name, "new name is wrong")
         self.assertEqual(found_ts, ts, "time stamp is wrong")
@@ -78,7 +78,10 @@ class Test(unittest.TestCase):
 
     def test_rename_files(self):
         result = get_files_list('datadir', True)
-        rename_file_list(result)
+        rename_file_list(result, True)
+        result = get_files_list('datadir/testdir3/', False)
+        self.assertEqual(['datadir/testdir3/test1.txt', 'datadir/testdir3/test2.txt', 'datadir/testdir3/test3.txt'], result, "time stamp is wrong")
+        
 
 def create_test_files_in(path):
     file_names = ('test1 (2014_08_25 20_02_34 UTC).txt', 'test1 (2014_12_25 20_02_34 UTC).txt', 'test2.txt', 'test3 (2014_08_25 20_02_34 UTC).txt', 'test3 (2014_12_25 20_02_34 UTC).txt')

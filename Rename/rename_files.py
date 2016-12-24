@@ -4,7 +4,7 @@ Created on Nov 20, 2016
 @author: cfsu
 '''
 
-from Rename.Uitl import get_files_list, get_dirs_list, parse_file_name,\
+from Uitl import get_files_list, get_dirs_list, parse_file_name,\
     rename_file_list
 import argparse
 
@@ -15,5 +15,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print "running script on {} with update flag {}".format(args.dir, args.update)
     
+    #get file list recursively
     result = get_files_list(args.dir, True)
     rename_file_list(result, args.update)

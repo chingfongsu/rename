@@ -11,9 +11,10 @@ import re
 def get_files_list(path, recursive = False):
     total_filenames = []
     for (dirpath, dirnames, filenames) in walk(path):
+        #print filenames
         full_dirpaths = []
         full_filenames = []
-        full_dirpaths.extend(os.path.join(dirpath, d) for d in dirnames) 
+        full_dirpaths.extend(os.path.join(dirpath, dir) for dir in dirnames) 
         full_filenames.extend(os.path.join(dirpath, f) for f in filenames)         
         total_filenames.extend(full_filenames)
         if recursive == False :
@@ -26,7 +27,7 @@ def rename_file_list(filenames, update=False):
     new_name_2_old_name_ts = {}
     for file in filenames :
         (new_name, ts) = parse_file_name(file)
-        print "parse {} to ({}, {})".format(file, new_name,ts)
+        #print "parse {} to ({}, {})".format(file, new_name,ts)
         old_name_2_new_name_ts[file] = (new_name, ts)
         #check if the new_name already exits
         if new_name in new_name_2_old_name_ts:
@@ -44,27 +45,34 @@ def rename_file_list(filenames, update=False):
     for file in old_name_2_new_name_ts:
         (new_name, ts) = old_name_2_new_name_ts[file]
         if not update:
-            if new_name == None:
+            if new_name:
+                if file != new_name:
+                    print "Dry run: rename {} to {}".format(file, new_name)
+            else:
                 print "Dry run: delete {}".format(file)
         else:  
             if new_name:
-                #print "rename {} to {}".format(file, new_name)
-                os.rename(file, new_name)
+                if file != new_name:
+                    try:
+                        print "rename {} to {}".format(file, new_name)
+                        os.rename(file, new_name)
+                    except OSError:
+                        print "remove failed"
             else:
                 try:
                     print "delete {}".format(file)
                     os.remove(file)
                 except OSError:
-                    pass
+                    print "delete fialed"
             
-def parse_file_name(name):
-    ts_search = re.search('\(([^)]*)UTC\)', name)
+def parse_file_name(file):
+    ts_search = re.search('\((20.*)UTC\)', file)
     if ts_search:
         ts = ts_search.group(1).strip()
-        new_name = re.sub(' \(' + ts + ' UTC\)', '', name)
+        new_name = re.sub(' \(' + ts + ' UTC\)', '', file)
         return (new_name, ts)
     else:
-        return (name, None)
+        return (file, '9999')
 
 def get_dirs_list(path):
     return True

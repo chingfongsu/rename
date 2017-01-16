@@ -22,6 +22,7 @@ class Test(unittest.TestCase):
 
         create_test_dir_in('datadir', 'testdir2')
         create_test_dir_in('datadir', 'testdir3')
+        create_test_dir_in('datadir', 'testdir4')
 
         create_test_files_in(os.path.join('datadir', 'testdir3'))
         
@@ -76,11 +77,29 @@ class Test(unittest.TestCase):
         self.assertEqual(found_name, new_name, "new name is wrong")
         self.assertEqual(found_ts, ts, "time stamp is wrong")
 
+        old_name = u'2016新春祈福流程_V6_021017 (2016_02_12 12_32_32 UTC).doc'
+        new_name = u'2016新春祈福流程_V6_021017.doc'
+        ts = "2016_02_12 12_32_32"
+        found_name, found_ts = parse_file_name(old_name)
+        self.assertEqual(found_name, new_name, "new name is wrong")
+        self.assertEqual(found_ts, ts, "time stamp is wrong")
+
+
     def test_rename_files(self):
         result = get_files_list('datadir', True)
         rename_file_list(result, True)
         result = get_files_list('datadir/testdir3/', False)
         self.assertEqual(['datadir/testdir3/test1.txt', 'datadir/testdir3/test2.txt', 'datadir/testdir3/test3.txt'], result, "time stamp is wrong")
+        
+    def test_handel_chinese_character(self):
+        file_name = u'2016新春祈福流程_V6_021017 (2016_02_12 12_32_32 UTC).doc'
+        with open(os.path.join('datadir','testdir4', file_name), "w") as f:
+            f.write(file_name.encode("UTF-8"))
+
+        result = get_files_list('datadir/testdir4', True)
+        rename_file_list(result, True)
+        result = get_files_list('datadir/testdir4/', False)
+        self.assertEqual([u'datadir/testdir4/2016新春祈福流程_V6_021017.doc'], result, "time stamp is wrong")
         
 
 def create_test_files_in(path):

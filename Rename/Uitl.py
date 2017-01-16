@@ -10,7 +10,7 @@ import re
 
 def get_files_list(path, recursive = False):
     total_filenames = []
-    for (dirpath, dirnames, filenames) in walk(path):
+    for (dirpath, dirnames, filenames) in walk(unicode(path, 'utf-8')):
         #print filenames
         full_dirpaths = []
         full_filenames = []
@@ -47,20 +47,20 @@ def rename_file_list(filenames, update=False):
         if not update:
             if new_name:
                 if file != new_name:
-                    print "Dry run: rename {} to {}".format(file, new_name)
+                    print "Dry run: rename {} to {}".format(file.encode("UTF-8"), new_name.encode("UTF-8"))
             else:
-                print "Dry run: delete {}".format(file)
+                print "Dry run: delete {}".format(file.encode("UTF-8"))
         else:  
             if new_name:
                 if file != new_name:
                     try:
-                        print "rename {} to {}".format(file, new_name)
+                        print "rename {} to {}".format(file.encode("UTF-8"), new_name.encode("UTF-8"))
                         os.rename(file, new_name)
                     except OSError:
-                        print "remove failed"
+                        print "rename failed"
             else:
                 try:
-                    print "delete {}".format(file)
+                    print "delete {}".format(file.encode("UTF-8"))
                     os.remove(file)
                 except OSError:
                     print "delete fialed"
